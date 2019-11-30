@@ -19,8 +19,8 @@ function subdivider (input_mesh) {
         var dest = twin.getOrign();
         var middle = origin.add(dest).multiply(0.5);
         var v = new Vertex(middle.x, middle.y, middle.z, id);
-        // mark V as new
-        this.newVertices.add(id);
+        // flag v as new
+        this.newVertices.add(middle);
         // add two new half-edges to mesh
         var heOne = mesh.addHalfEdge();
         var heTwo = mesh.addHalfEdge();
@@ -28,21 +28,52 @@ function subdivider (input_mesh) {
         heOne.setOrigin(origin);
         heOne.setNext(he);
         heOne.setPrev(he.getPrev());
+        heOne.setTwin(heTwo);
         he.setPrev(heOne);
         heTwo.setOrigin(middle);
         heTwo.setPrev(twin);
         heTwo.setNext(twin.getNext());
+        heTwo.setTwin(heOne);
         twin.setNext(heTwo);
         he.setOrigin(middle);
+        // set already split flags
         [he, twin, heOne, heTwo].forEach(item => this.splitEdges.add(item));
-
-        
-
-
     }
 
-    this.cornerCut = function() {
+    this.cornerCut = function(face, mesh) {
+        var faceEdge = face.getEdge()
 
+        // check if the face is already triangular 
+        if(faceEdge.getNext().getNext().getNext() == faceEdge)
+        {
+            console.log("==============================");
+            console.log("something is wrong: face is triangular already");
+            console.log("==============================");
+        }
+
+        var heNew = mesh.addHalfEdge();
+        var newTwin = mesh.addHalfEdge();
+        [heNew, newTwin].forEach(item => this.splitEdges.add(item));
+        var origin = faceEdge.getOrigin();
+
+        // do all the common stuff
+        var v2 = faceEdge.getNext().getOrigin();
+        var v3 = faceEdge.getPrev().getOrigin();
+        heNew.setOrigin(v2);
+        heNew.setPrev(faceEdge);
+        heNew.setNext(faceEdge.getPrev());
+        heNew.setTwin(newTwin);
+        newTwin.setOrigin(v3);
+        newTwin.setPrev(faceEdge.getPrev().getPrev());
+        newTwin.setNext(faceEdge.getNext());
+        newTwin.setTwin(heNew);
+        newTwin.setFace(face);
+        faceEdge.setNext(heNew);
+        faceEdge.getPrev().setPrev(heNew);
+        var newFace = mesh.addFaceByHE(faceEdge, heNew, faceEdge.getPrev());
+
+        // figure out the specific case / set the he for original face
+        face.setEdge(newTwin.getPrev());
     }
 
     this.subdivide = function (level) {
