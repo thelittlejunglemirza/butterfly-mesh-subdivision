@@ -63,7 +63,7 @@ function Vector3D (dx, dy, dz) {
 
         length = this.norm();
         if (Math.abs(length) < 0.0000001) {
-            return null; // Invalid vector
+            return new Vector3D(0, 0, 0); // Invalid vector
         }
 
         percent = 1.0 / length;

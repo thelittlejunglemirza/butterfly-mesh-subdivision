@@ -61,6 +61,7 @@ class Face {
         var v1 = this.vert(1).position;
         var v2 = this.vert(2).position;
 
+
         var u = v1.subtract(v0);
         var u = u.normalize();
         var v = v2.subtract(v0);
@@ -264,7 +265,6 @@ class Mesh {
             count.push(0);
         }
 
-        console.log(this.faces.length);
         for (var i = 0; i < this.faces.length; i++) {
             var f = this.faces[i];
             var n = f.computeNormal();
@@ -273,6 +273,8 @@ class Mesh {
             var v1_idx = this.faces[i].getEdge().getNext().getOrigin().getId();
             var v2_idx = this.faces[i].getEdge().getPrev().getOrigin().getId();
 
+            console.log(f);
+            console.log(n);
             this.normals[v0_idx] = this.normals[v0_idx].add(n);
             this.normals[v1_idx] = this.normals[v1_idx].add(n);
             this.normals[v2_idx] = this.normals[v2_idx].add(n);

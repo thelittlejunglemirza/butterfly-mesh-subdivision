@@ -121,15 +121,7 @@ subInc.addEventListener("click", function(){
     subdivisionInput.value = input_value; 
 
     // Calling subdivision here
-    try
-    {
-        subdiv.subdivide(input_value);
-        
-    }
-    catch(err)
-    {
-        console.log("unable to subIncrease: "  + err);
-    }
+    cur_mesh = subdiv.subdivide(input_value);    
     
     gl_operation.drawSetup();
     gl_operation.modelSetup(cur_mesh);
@@ -144,6 +136,7 @@ subDec.addEventListener("click", function(){
         subdivisionInput.value = input_value;
 
         // Calling subdivision here
+        cur_mesh = subdiv.subdivide(input_value);
         
         gl_operation.drawSetup();
         gl_operation.modelSetup(cur_mesh);
