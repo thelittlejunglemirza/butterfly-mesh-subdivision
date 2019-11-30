@@ -163,7 +163,7 @@ $(document).ready(function(){
 
         loader.load(mesh_file, function(out){
             console.log('Read Mesh!');
-            cur_mesh.builMesh(out.vertices, out.normals, out.faces);
+            cur_mesh.buildMesh(out.vertices, out.normals, out.faces);
 
             gl_operation.drawSetup();
             gl_operation.cameraSetup();

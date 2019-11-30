@@ -81,7 +81,7 @@ class Mesh {
         this.edgeMap = new Map();
     }
 
-    builMesh (verts, normals, faces) {
+    buildMesh (verts, normals, faces) {
         this.clear();
 
         // Add vertices and vertex normals to our trimesh.
